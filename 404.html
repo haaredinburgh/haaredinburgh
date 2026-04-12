@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Page Not Found — Haar Edinburgh</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inconsolata:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#080a0e;--deep:#0d1118;--stone:#1c2230;
+    --mist:#a8b4c8;--fog:#6e7d94;--rust:#b8472a;--ember:#d4622e;
+    --cream:#e8dfd0;--white:#f2ede6;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{color-scheme:dark;background:#080a0e;}
+  body{background:var(--black);color:var(--cream);font-family:'EB Garamond',Georgia,serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 24px;text-align:center;overflow-x:hidden;}
+
+  /* ── MIST ── */
+  .mist-canvas{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+  .mist-layer{position:absolute;width:200%;height:100%;opacity:0;animation:mistDrift linear infinite;}
+  .mist-layer::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 30% 50%,rgba(168,180,200,0.06) 0%,transparent 70%),radial-gradient(ellipse 40% 60% at 70% 30%,rgba(168,180,200,0.04) 0%,transparent 60%);}
+  .mist-layer:nth-child(1){animation-duration:34s;animation-delay:0s;opacity:1;top:0}
+  .mist-layer:nth-child(2){animation-duration:52s;animation-delay:-18s;opacity:1;top:20%;transform:scaleY(-1)}
+  .mist-layer:nth-child(3){animation-duration:41s;animation-delay:-8s;opacity:1;top:55%}
+  @keyframes mistDrift{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+  .content{position:relative;z-index:1;max-width:560px;}
+
+  .eyebrow{font-family:'Inconsolata',monospace;font-size:12px;letter-spacing:3.5px;text-transform:uppercase;color:var(--rust);margin-bottom:24px;display:flex;align-items:center;justify-content:center;gap:14px;}
+  .eyebrow::before,.eyebrow::after{content:'';display:block;width:32px;height:1px;background:var(--rust);}
+
+  .headline{font-family:'Playfair Display',serif;font-size:clamp(52px,12vw,96px);font-weight:900;line-height:1;letter-spacing:-3px;color:var(--white);margin-bottom:16px;}
+
+  .subheading{font-family:'Playfair Display',serif;font-size:clamp(22px,4vw,32px);font-weight:400;font-style:italic;color:var(--mist);margin-bottom:32px;line-height:1.2;}
+
+  .body{font-size:18px;line-height:1.75;color:var(--fog);margin-bottom:48px;}
+
+  .actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+
+  .btn-primary{font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--black);background:var(--cream);padding:16px 32px;text-decoration:none;display:inline-block;transition:background 0.2s,transform 0.15s;}
+  .btn-primary:hover{background:var(--white);transform:translateY(-1px);}
+
+  .btn-secondary{font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--fog);background:transparent;border:1px solid rgba(168,180,200,0.2);padding:16px 32px;text-decoration:none;display:inline-block;transition:color 0.2s,border-color 0.2s;}
+  .btn-secondary:hover{color:var(--cream);border-color:rgba(168,180,200,0.4);}
+
+  .logo{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:var(--white);text-decoration:none;position:fixed;top:24px;left:32px;z-index:100;}
+
+  @media(max-width:560px){
+    .logo{top:18px;left:24px;}
+    .actions{flex-direction:column;align-items:center;}
+    .btn-primary,.btn-secondary{width:100%;text-align:center;}
+  }
+</style>
+</head>
+<body>
+
+<div class="mist-canvas">
+  <div class="mist-layer"></div>
+  <div class="mist-layer"></div>
+  <div class="mist-layer"></div>
+</div>
+
+<a href="/" class="logo">Haar</a>
+
+<div class="content">
+  <div class="eyebrow">404</div>
+  <h1 class="headline">Lost in the mist.</h1>
+  <p class="subheading">This page doesn't exist.</p>
+  <p class="body">The link might be broken or the page may have moved. Head back to see what's on in Edinburgh tonight.</p>
+  <div class="actions">
+    <a href="/" class="btn-primary">What's on tonight →</a>
+    <a href="/about" class="btn-secondary">About Haar</a>
+  </div>
+</div>
+
+</body>
+</html>

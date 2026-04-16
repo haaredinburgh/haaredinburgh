@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+
+<title>About — Haar Edinburgh | Pro-arts, pro-community, no gatekeeping</title>
+<meta name="description" content="Haar is Edinburgh's free event directory. Pro-arts, pro-community, no gatekeeping. Find out who we are and what drives us.">
+<meta name="robots" content="index, follow">
+
+<link rel="canonical" href="https://haaredinburgh.org/about">
+
+<meta property="og:title" content="About Haar Edinburgh">
+<meta property="og:description" content="Pro-arts, pro-community, no gatekeeping. Edinburgh's free event directory.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://haaredinburgh.org/about">
+<meta property="og:locale" content="en_GB">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="About Haar Edinburgh">
+<meta name="twitter:description" content="Pro-arts, pro-community, no gatekeeping. Edinburgh's free event directory.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "url": "https://haaredinburgh.org/about",
+  "name": "About Haar Edinburgh",
+  "description": "Haar is Edinburgh's free event directory. Pro-arts, pro-community, no gatekeeping.",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Haar Edinburgh",
+    "url": "https://haaredinburgh.org/",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Edinburgh",
+      "addressCountry": "GB"
+    }
+  }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inconsolata:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #080a0e;
+    --deep: #0d1118;
+    --void: #111520;
+    --stone: #1c2230;
+    --mist: #a8b4c8;
+    --fog: #6e7d94;
+    --rust: #b8472a;
+    --ember: #d4622e;
+    --gold: #c8a96e;
+    --cream: #e8dfd0;
+    --white: #f2ede6;
+    --green: #6db87a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; color-scheme: dark; background-color: #080a0e; }
+  body {
+    background: var(--black);
+    color: var(--cream);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── MIST ── */
+  .mist-canvas { position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden; }
+  .mist-layer { position:absolute;width:200%;height:100%;opacity:0;animation:mistDrift linear infinite; }
+  .mist-layer::before {
+    content:'';position:absolute;inset:0;
+    background: radial-gradient(ellipse 60% 40% at 30% 50%, rgba(168,180,200,0.06) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 60% at 70% 30%, rgba(168,180,200,0.04) 0%, transparent 60%);
+  }
+  .mist-layer:nth-child(1){animation-duration:34s;animation-delay:0s;opacity:1;top:0}
+  .mist-layer:nth-child(2){animation-duration:52s;animation-delay:-18s;opacity:1;top:20%;transform:scaleY(-1)}
+  .mist-layer:nth-child(3){animation-duration:41s;animation-delay:-8s;opacity:1;top:55%}
+  .mist-layer:nth-child(4){animation-duration:60s;animation-delay:-30s;opacity:1;top:10%}
+  .mist-pocket{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;animation:pocketFloat ease-in-out infinite alternate;}
+  .mist-pocket:nth-child(5){width:600px;height:300px;background:rgba(168,180,200,0.035);top:5%;left:-100px;animation-duration:22s;}
+  .mist-pocket:nth-child(6){width:400px;height:400px;background:rgba(184,71,42,0.025);top:40%;right:-80px;animation-duration:30s;animation-delay:-12s;}
+  .mist-pocket:nth-child(7){width:700px;height:200px;background:rgba(168,180,200,0.03);bottom:20%;left:10%;animation-duration:26s;animation-delay:-6s;}
+  @keyframes mistDrift{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+  @keyframes pocketFloat{0%{transform:translateY(0) scale(1);opacity:.6}100%{transform:translateY(-30px) scale(1.05);opacity:1}}
+
+  /* ── NAV ── */
+  nav {
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px 48px;
+    border-bottom:1px solid rgba(168,180,200,0.08);
+    background:linear-gradient(to bottom,rgba(8,10,14,0.95) 0%,rgba(8,10,14,0.7) 100%);
+    backdrop-filter:blur(12px);
+    animation:fadeDown 0.6s ease both;
+  }
+  .nav-logo{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;letter-spacing:-0.5px;color:var(--white);text-decoration:none;position:relative;}
+  .nav-logo::after{content:'';position:absolute;bottom:-2px;left:0;width:100%;height:1px;background:var(--rust);transform:scaleX(0);transform-origin:left;transition:transform 0.3s ease;}
+  .nav-logo:hover::after{transform:scaleX(1);}
+  .nav-tagline{font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:3px;color:var(--fog);text-transform:uppercase;}
+  .nav-links{display:flex;gap:28px;list-style:none;}
+  .nav-links a{font-family:'Inconsolata',monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--fog);text-decoration:none;transition:color 0.2s;}
+  .nav-links a:hover{color:var(--cream);}
+  .nav-links a.active{color:var(--cream);border-bottom:1px solid var(--rust);padding-bottom:2px;}
+  .btn-nav{font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--cream);background:var(--rust);border:none;padding:10px 22px;cursor:pointer;transition:background 0.2s,transform 0.15s;text-decoration:none;display:inline-block;}
+  .btn-nav:hover{background:var(--ember);transform:translateY(-1px);}
+
+  /* ── MAIN LAYOUT ── */
+  .about-wrap{
+    position:relative;z-index:1;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    min-height:calc(100vh - 88px);
+    padding-top:88px;
+    animation:fadeUp 0.9s 0.1s ease both;
+  }
+
+  /* ── LEFT COLUMN ── */
+  .about-left{
+    padding:48px;
+    border-right:1px solid rgba(168,180,200,0.06);
+    display:flex;
+    flex-direction:column;
+    gap:32px;
+  }
+  .page-eyebrow{font-family:'Inconsolata',monospace;font-size:12px;letter-spacing:4.5px;text-transform:uppercase;color:var(--rust);margin-bottom:0;display:flex;align-items:center;gap:14px;}
+  .page-eyebrow::before{content:'';display:block;width:32px;height:1px;background:var(--rust);}
+  .page-headline{font-family:'Playfair Display',serif;font-size:clamp(38px,4vw,64px);font-weight:900;line-height:1.0;letter-spacing:-2px;color:var(--white);margin-bottom:0;}
+  .page-headline em{font-style:italic;color:var(--mist);}
+  .section-label{font-family:'Inconsolata',monospace;font-size:12px;letter-spacing:3.5px;text-transform:uppercase;color:var(--rust);margin-bottom:0;display:flex;align-items:center;gap:10px;}
+  .section-label::before{content:'';display:block;width:20px;height:1px;background:var(--rust);}
+  .who-body{font-size:18px;line-height:1.75;color:var(--fog);margin-bottom:0;}
+  .who-body strong{color:var(--cream);font-weight:400;}
+  .about-section{display:flex;flex-direction:column;gap:14px;}
+
+  /* ── PROMOTER CTA ── */
+  .promoter-cta{background:var(--deep);border:1px solid rgba(168,180,200,0.08);padding:36px;position:relative;overflow:hidden;}
+  .promoter-cta::before{content:'';position:absolute;bottom:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(184,71,42,0.12) 0%,transparent 70%);pointer-events:none;}
+  .promoter-cta-eyebrow{font-family:'Inconsolata',monospace;font-size:12px;letter-spacing:3.5px;text-transform:uppercase;color:var(--rust);margin-bottom:12px;}
+  .promoter-cta-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--white);line-height:1.2;margin-bottom:12px;}
+  .promoter-cta-title em{font-style:italic;color:var(--mist);}
+  .promoter-cta-body{font-size:15px;line-height:1.6;color:var(--fog);margin-bottom:24px;}
+  .btn-cta{font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--cream);background:var(--rust);padding:14px 28px;text-decoration:none;display:inline-block;transition:background 0.2s;}
+  .btn-cta:hover{background:var(--ember);}
+
+  /* ── RIGHT COLUMN — ETHOS ── */
+  .about-right{
+    display:flex;
+    flex-direction:column;
+  }
+  .ethos-header{
+    padding:64px 48px;
+    display:flex;
+    flex-direction:column;
+    gap:32px;
+  }
+  .ethos-body{font-size:18px;line-height:1.75;color:var(--fog);margin-top:16px;}
+
+  .page-end{height:80px;}
+  @media(max-width:900px){.page-end{height:56px;}}
+  .about-headline{font-family:'Playfair Display',serif;font-size:clamp(32px,3vw,48px);font-weight:900;color:var(--white);line-height:1.0;letter-spacing:-1px;}
+  .about-headline em{font-style:italic;color:var(--mist);}
+
+  /* ── NEWSLETTER ── */
+  .newsletter{position:relative;z-index:1;margin:0 48px;background:var(--deep);border:1px solid rgba(168,180,200,0.08);padding:56px 64px;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:64px;overflow:hidden;}
+  .newsletter::before{content:'';position:absolute;top:-80px;right:200px;width:400px;height:400px;background:radial-gradient(circle,rgba(184,71,42,0.08) 0%,transparent 70%);pointer-events:none;}
+  .newsletter-title{font-family:'Playfair Display',serif;font-size:36px;font-weight:900;color:var(--white);line-height:1.1;letter-spacing:-0.5px;margin-bottom:16px;}
+  .newsletter-title em{font-style:italic;color:var(--mist);}
+  .newsletter-body{color:var(--fog);font-size:16px;line-height:1.6;}
+  .newsletter-form{display:flex;flex-direction:column;gap:14px;}
+  .newsletter-input{background:rgba(168,180,200,0.05);border:1px solid rgba(168,180,200,0.15);color:var(--cream);font-family:'EB Garamond',serif;font-size:16px;padding:14px 20px;width:100%;outline:none;transition:border-color 0.2s;}
+  .newsletter-input:focus{border-color:rgba(168,180,200,0.4);}
+  .newsletter-input::placeholder{color:var(--fog);}
+  .newsletter-submit{font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--black);background:var(--cream);border:none;padding:16px 32px;cursor:pointer;align-self:flex-start;transition:background 0.2s,transform 0.15s;}
+  .newsletter-submit:hover{background:var(--white);transform:translateY(-1px);}
+
+  /* ── FOOTER ── */
+  footer{position:relative;z-index:1;border-top:1px solid rgba(168,180,200,0.06);padding:48px 48px 36px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;}
+  .footer-brand .logo{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:var(--white);margin-bottom:16px;display:block;text-decoration:none;}
+  .footer-ethos{font-size:15px;line-height:1.65;color:var(--fog);max-width:300px;margin-bottom:24px;}
+  .footer-badges{display:flex;gap:10px;flex-wrap:wrap;}
+  .badge{font-family:'Inconsolata',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--fog);border:1px solid rgba(110,125,148,0.25);padding:5px 10px;}
+  .footer-col h4{font-family:'Inconsolata',monospace;font-size:12px;letter-spacing:3.5px;text-transform:uppercase;color:var(--rust);margin-bottom:20px;}
+  .footer-col ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
+  .footer-col a{font-size:15px;color:var(--fog);text-decoration:none;transition:color 0.2s;}
+  .footer-col a:hover{color:var(--cream);}
+  .footer-bottom{grid-column:1/-1;border-top:1px solid rgba(168,180,200,0.06);padding-top:28px;display:flex;justify-content:space-between;align-items:center;}
+  .footer-copy{font-family:'Inconsolata',monospace;font-size:10px;letter-spacing:1.5px;color:rgba(110,125,148,0.5);text-transform:uppercase;}
+  .footer-haar{font-family:'Playfair Display',serif;font-size:11px;font-style:italic;color:rgba(110,125,148,0.4);}
+
+  /* ── HAMBURGER ── */
+  .nav-hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px;}
+  .nav-hamburger span{display:block;width:22px;height:1.5px;background:var(--fog);transition:all 0.3s;}
+  .nav-hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+  .nav-hamburger.open span:nth-child(2){opacity:0;}
+  .nav-hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+  .nav-mobile{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(8,10,14,0.98);z-index:99;flex-direction:column;align-items:center;justify-content:center;gap:40px;}
+  .nav-mobile.open{display:flex;}
+  .nav-mobile a{font-family:'Inconsolata',monospace;font-size:16px;letter-spacing:3px;text-transform:uppercase;color:var(--fog);text-decoration:none;transition:color 0.2s;}
+  .nav-mobile a:hover{color:var(--cream);}
+  .nav-mobile .btn-nav{font-size:13px;padding:14px 32px;}
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:900px){
+    nav{padding:18px 24px;}
+    .nav-links,.nav-tagline,nav .btn-nav{display:none;}
+    .nav-hamburger{display:flex;}
+    .about-wrap{grid-template-columns:1fr;min-height:auto;}
+    .about-left{padding:32px 24px;border-right:none;border-bottom:none;gap:24px;}
+    .page-headline{margin-bottom:32px;font-size:clamp(32px,8vw,52px);}
+    .who-body{margin-bottom:0;font-size:17px;}
+    .about-right{padding:0 24px 40px;}
+    .ethos-header{padding:0;}
+    .promoter-cta{margin-top:32px !important;}
+    .newsletter{margin:0 24px;padding:40px 32px;grid-template-columns:1fr;gap:32px;}
+    .newsletter-title{font-size:28px;}
+    footer{padding:40px 24px 28px;grid-template-columns:1fr 1fr;gap:36px;}
+    .footer-brand{grid-column:1/-1;}
+    .footer-bottom{flex-direction:column;gap:12px;text-align:center;}
+  }
+
+  @media(max-width:560px){
+    footer{grid-template-columns:1fr;gap:28px;}
+    .footer-haar{display:none;}
+  }
+
+  @keyframes fadeDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  ::-webkit-scrollbar{width:6px;}
+  ::-webkit-scrollbar-track{background:var(--black);}
+  ::-webkit-scrollbar-thumb{background:var(--stone);border-radius:3px;}
+</style>
+</head>
+<body>
+
+<div class="mist-canvas">
+  <div class="mist-layer"></div>
+  <div class="mist-layer"></div>
+  <div class="mist-layer"></div>
+  <div class="mist-layer"></div>
+  <div class="mist-pocket"></div>
+  <div class="mist-pocket"></div>
+  <div class="mist-pocket"></div>
+</div>
+
+<!-- Nav -->
+<nav>
+  <div style="display:flex;align-items:center;gap:20px;">
+    <a href="/" class="nav-logo">Haar</a>
+    <span class="nav-tagline">Edinburgh</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="/">What's On</a></li>
+    <li><a href="/about" class="active">About</a></li>
+    <li><a href="/promote">Promote</a></li>
+  </ul>
+  <a href="/" class="btn-nav">Browse Events</a>
+  <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile menu -->
+<div class="nav-mobile" id="nav-mobile">
+  <a href="/" onclick="toggleMenu()">What's On</a>
+  <a href="/about" onclick="toggleMenu()">About</a>
+  <a href="/promote" onclick="toggleMenu()">Promote</a>
+  <a href="/" class="btn-nav" onclick="toggleMenu()">Browse Events</a>
+</div>
+
+<!-- Two column layout -->
+<div class="about-wrap">
+
+  <!-- Left: Who we are + Our ethos -->
+  <div class="about-left">
+    <div class="about-section">
+      <div class="section-label">About Haar</div>
+      <h1 class="about-headline">Who we <em>are.</em></h1>
+      <p class="who-body">Haar is Edinburgh's free event directory — the events map of the city. A calendar of everything happening across Edinburgh, in one place. Browse by date, type, or area. Live music, club nights, comedy, arts, and community events. Every listing clicks straight through to the event's own page. We drive the traffic, you keep it.</p>
+    </div>
+    <div class="about-section">
+      <h2 class="about-headline">Our <em>ethos.</em></h2>
+      <p class="who-body">No advertisers, no agenda. Our aim is to be part of a wider positive movement for the city's arts and community. Free to list, free to browse. Community before profit.</p>
+    </div>
+  </div>
+
+  <!-- Right: CTA -->
+  <div class="about-right">
+    <div class="ethos-header">
+      <div class="promoter-cta">
+        <div class="promoter-cta-eyebrow">List an event</div>
+        <h2 class="promoter-cta-title">Putting on something<br><em>in Edinburgh?</em></h2>
+        <a href="/promote" class="btn-cta">Get started →</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Newsletter -->
+<section class="newsletter">
+  <div>
+    <h2 class="newsletter-title">The <em>Haar</em> Letter</h2>
+    <p class="newsletter-body">Edinburgh's best events. Curated and delivered, once a month.</p>
+  </div>
+  <div class="newsletter-form">
+    <input class="newsletter-input" type="email" placeholder="your@email.com" aria-label="Email address">
+    <button class="newsletter-submit">Subscribe →</button>
+  </div>
+</section>
+
+<div class="page-end"></div>
+<!-- Footer -->
+<footer>
+  <div class="footer-brand">
+    <a href="/" class="logo">Haar</a>
+    <p class="footer-ethos">Edinburgh's free event directory. Pro-arts, pro-community, no gatekeeping.</p>
+    <div class="footer-badges">
+      <span class="badge">Free to browse</span>
+      <span class="badge">Edinburgh-made</span>
+    </div>
+  </div>
+
+  <div class="footer-col">
+    <h4>Discover</h4>
+    <ul>
+      <li><a href="/">What's On</a></li>
+    </ul>
+  </div>
+
+  <div class="footer-col">
+    <h4>Promote</h4>
+    <ul>
+      <li><a href="/promote">List an event</a></li>
+      <li><a href="/promote#how-it-works">How it works</a></li>
+    </ul>
+  </div>
+
+  <div class="footer-col">
+    <h4>About</h4>
+    <ul>
+      <li><a href="/about">Who we are</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </div>
+
+  <div class="footer-bottom">
+    <span class="footer-copy">&copy; 2026 Haar Edinburgh &mdash; All rights reserved</span>
+    <span class="footer-haar">The sea mist rolls in off the Firth, and with it, tonight's listings.</span>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const menu = document.getElementById('nav-mobile');
+    const burger = document.querySelector('.nav-hamburger');
+    menu.classList.toggle('open');
+    burger.classList.toggle('open');
+    document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+  }
+
+  document.addEventListener('mousemove', e => {
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    const dx = (e.clientX - cx) / cx;
+    const dy = (e.clientY - cy) / cy;
+    document.querySelectorAll('.mist-pocket').forEach((el, i) => {
+      const strength = (i + 1) * 8;
+      el.style.transform = `translate(${dx * strength}px, ${dy * strength}px)`;
+    });
+  });
+</script>
+
+</body>
+</html>

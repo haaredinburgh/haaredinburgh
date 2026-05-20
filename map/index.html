@@ -546,8 +546,7 @@
 </div>
 
 <script>
-  // ── CONFIG ── Replace YOUR_MAPS_API_KEY with your actual key before deploying
-  const MAPS_API_KEY = 'AIzaSyCvlrNCJyGv2qRhBmeKGv7hUH1Y3kGnRJA';
+let MAPS_API_KEY = '';
 
   // ── CATEGORY COLOURS ──
   const CAT_COLOURS = {
@@ -912,11 +911,18 @@
     menu.classList.toggle('open');
     document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
   }
-</script>
-
-<!-- Load Google Maps API — replace YOUR_MAPS_API_KEY before deploying -->
-<script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCvlrNCJyGv2qRhBmeKGv7hUH1Y3kGnRJA&callback=initMap">
+<script>
+async function loadMapsAPI() {
+  const res = await fetch('/.netlify/functions/maps-key');
+  const data = await res.json();
+  MAPS_API_KEY = data.key;
+  const script = document.createElement('script');
+  script.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_API_KEY}&callback=initMap`;
+  script.async = true;
+  script.defer = true;
+  document.head.appendChild(script);
+}
+loadMapsAPI();
 </script>
 
 </body>

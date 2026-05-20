@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QMZ0N9B29M"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-QMZ0N9B29M');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Map View — Haar Edinburgh | Events Map</title>
+<meta name="description" content="Explore Edinburgh's events on a map. Live music, club nights, comedy, arts and community events across the city.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://haaredinburgh.org/map">
+<meta property="og:title" content="Map View — Haar Edinburgh">
+<meta property="og:description" content="Explore Edinburgh's events on a map.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://haaredinburgh.org/map">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inconsolata:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --black: #080a0e;
+    --deep: #0d1118;
+    --void: #111520;
+    --stone: #1c2230;
+    --mist: #a8b4c8;
+    --fog: #6e7d94;
+    --rust: #b8472a;
+    --ember: #d4622e;
+    --gold: #c8a96e;
+    --cream: #e8dfd0;
+    --white: #f2ede6;
+    --green: #6db87a;
+
+    /* Category colours */
+    --cat-live-music: #b8472a;
+    --cat-club-night: #7b5ea7;
+    --cat-comedy: #c8a96e;
+    --cat-arts: #4a9ebb;
+    --cat-community: #6db87a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; color-scheme: dark; background-color: #080a0e; }
+  body {
+    background: var(--black);
+    color: var(--cream);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── MIST ── */
+  .mist-canvas { position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden; }
+  .mist-layer { position:absolute;width:200%;height:100%;opacity:0;animation:mistDrift linear infinite; }
+  .mist-layer::before {
+    content:'';position:absolute;inset:0;
+    background: radial-gradient(ellipse 60% 40% at 30% 50%, rgba(168,180,200,0.06) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 60% at 70% 30%, rgba(168,180,200,0.04) 0%, transparent 60%);
+  }
+  .mist-layer:nth-child(1){animation-duration:34s;animation-delay:0s;opacity:1;top:0}
+  .mist-layer:nth-child(2){animation-duration:52s;animation-delay:-18s;opacity:1;top:20%;transform:scaleY(-1)}
+  .mist-layer:nth-child(3){animation-duration:41s;animation-delay:-8s;opacity:1;top:55%}
+  .mist-layer:nth-child(4){animation-duration:60s;animation-delay:-30s;opacity:1;top:10%}
+  .mist-pocket{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;animation:pocketFloat ease-in-out infinite alternate;}
+  .mist-pocket:nth-child(5){width:600px;height:300px;background:rgba(168,180,200,0.035);top:5%;left:-100px;animation-duration:22s;}
+  .mist-pocket:nth-child(6){width:400px;height:400px;background:rgba(184,71,42,0.025);top:40%;right:-80px;animation-duration:30s;animation-delay:-12s;}
+  .mist-pocket:nth-child(7){width:700px;height:200px;background:rgba(168,180,200,0.03);bottom:20%;left:10%;animation-duration:26s;animation-delay:-6s;}
+  @keyframes mistDrift{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+  @keyframes pocketFloat{0%{transform:translateY(0) scale(1);opacity:.6}100%{transform:translateY(-30px) scale(1.05);opacity:1}}
+
+  /* ── NAV ── */
+  nav {
+    position:relative;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px 48px;
+    border-bottom:1px solid rgba(168,180,200,0.08);
+    background:linear-gradient(to bottom,rgba(8,10,14,0.95) 0%,rgba(8,10,14,0.7) 100%);
+    backdrop-filter:blur(12px);
+    flex-shrink: 0;
+  }
+  .nav-logo {
+    font-family:'Playfair Display',serif;font-size:28px;font-weight:900;
+    letter-spacing:-0.5px;color:var(--white);text-decoration:none;position:relative;
+  }
+  .nav-logo::after{content:'';position:absolute;bottom:-2px;left:0;width:100%;height:1px;background:var(--rust);transform:scaleX(0);transform-origin:left;transition:transform 0.3s ease;}
+  .nav-logo:hover::after{transform:scaleX(1);}
+  .nav-tagline{font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:3px;color:var(--fog);text-transform:uppercase;}
+  .nav-links{display:flex;gap:28px;list-style:none;}
+  .nav-links a{font-family:'Inconsolata',monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--fog);text-decoration:none;transition:color 0.2s;}
+  .nav-links a:hover{color:var(--cream);}
+  .nav-links a.active{color:var(--cream);border-bottom:1px solid var(--rust);padding-bottom:2px;}
+  .btn-nav{font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--cream);background:var(--rust);border:none;padding:10px 22px;cursor:pointer;transition:background 0.2s,transform 0.15s;}
+  .btn-nav:hover{background:var(--ember);transform:translateY(-1px);}
+
+  /* ── HAMBURGER ── */
+  .nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;}
+  .nav-hamburger span{display:block;width:22px;height:1.5px;background:var(--fog);transition:all 0.3s;}
+  .nav-mobile{display:none;position:fixed;inset:0;background:var(--black);z-index:99;flex-direction:column;align-items:center;justify-content:center;gap:32px;}
+  .nav-mobile.open{display:flex;}
+  .nav-mobile a{font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:var(--white);text-decoration:none;}
+
+  /* ── MAP CONTROLS BAR ── */
+  .map-controls {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 0 48px;
+    border-bottom: 1px solid rgba(168,180,200,0.06);
+    background: rgba(13,17,24,0.92);
+    backdrop-filter: blur(8px);
+    flex-shrink: 0;
+    overflow-x: auto;
+  }
+
+  .control-group {
+    display: flex;
+    align-items: center;
+    border-right: 1px solid rgba(168,180,200,0.06);
+    padding: 0 24px 0 0;
+    margin-right: 24px;
+    flex-shrink: 0;
+  }
+  .control-group:last-child { border-right: none; margin-right: 0; }
+
+  .control-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-right: 14px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .filter-pills { display: flex; gap: 4px; padding: 14px 0; }
+  .pill {
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--fog);
+    background: transparent;
+    border: 1px solid rgba(168,180,200,0.1);
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .pill:hover { color: var(--cream); border-color: rgba(168,180,200,0.3); }
+  .pill.active { color: var(--black); background: var(--mist); border-color: var(--mist); }
+
+  /* Category pill colours when active */
+  .pill[data-cat="Live Music"].active { background: var(--cat-live-music); border-color: var(--cat-live-music); color: var(--white); }
+  .pill[data-cat="Club Night"].active { background: var(--cat-club-night); border-color: var(--cat-club-night); color: var(--white); }
+  .pill[data-cat="Comedy"].active { background: var(--cat-comedy); border-color: var(--cat-comedy); color: var(--black); }
+  .pill[data-cat="Arts"].active { background: var(--cat-arts); border-color: var(--cat-arts); color: var(--white); }
+  .pill[data-cat="Community"].active { background: var(--cat-community); border-color: var(--cat-community); color: var(--black); }
+
+  /* ── MAP + PANEL LAYOUT ── */
+  .map-wrapper {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  #map {
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* ── EVENT PANEL ── */
+  .event-panel {
+    width: 380px;
+    flex-shrink: 0;
+    background: var(--deep);
+    border-left: 1px solid rgba(168,180,200,0.08);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+  }
+
+  .panel-header {
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid rgba(168,180,200,0.06);
+    flex-shrink: 0;
+  }
+  .panel-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+  .panel-subtitle {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--fog);
+  }
+
+  .panel-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 0;
+  }
+  .panel-list::-webkit-scrollbar { width: 4px; }
+  .panel-list::-webkit-scrollbar-track { background: transparent; }
+  .panel-list::-webkit-scrollbar-thumb { background: rgba(168,180,200,0.15); }
+
+  .panel-event {
+    padding: 16px 28px;
+    border-bottom: 1px solid rgba(168,180,200,0.04);
+    cursor: pointer;
+    transition: background 0.15s;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .panel-event:hover { background: rgba(168,180,200,0.04); }
+  .panel-event.active { background: rgba(168,180,200,0.07); }
+
+  .panel-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+
+  .panel-event-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+  .panel-event-venue {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--mist);
+    margin-bottom: 2px;
+  }
+  .panel-event-meta {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    color: var(--fog);
+  }
+  .panel-event-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-top: 4px;
+  }
+  .panel-event-price.free { color: var(--green); }
+
+  .panel-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 12px;
+    padding: 40px;
+    text-align: center;
+  }
+  .panel-empty-label {
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--fog);
+  }
+
+  /* ── LEGEND ── */
+  .map-legend {
+    position: absolute;
+    bottom: 32px;
+    left: 24px;
+    z-index: 5;
+    background: rgba(13,17,24,0.92);
+    border: 1px solid rgba(168,180,200,0.1);
+    backdrop-filter: blur(8px);
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .legend-title {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--fog);
+    margin-bottom: 4px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--mist);
+  }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── INFO WINDOW (custom) ── */
+  .custom-info {
+    background: var(--deep);
+    border: 1px solid rgba(168,180,200,0.15);
+    padding: 16px 20px;
+    min-width: 220px;
+    max-width: 280px;
+    font-family: 'EB Garamond', serif;
+  }
+  .info-category {
+    font-family: 'Inconsolata', monospace;
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .info-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .info-meta {
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    color: var(--fog);
+    letter-spacing: 0.5px;
+    line-height: 1.8;
+  }
+  .info-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-top: 10px;
+  }
+  .info-price.free { color: var(--green); }
+  .info-btn {
+    display: inline-block;
+    margin-top: 12px;
+    font-family: 'Inconsolata', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--cream);
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .info-btn:hover { background: var(--white); }
+
+  /* ── LOADING STATE ── */
+  .map-loading {
+    position: absolute;
+    inset: 0;
+    background: rgba(8,10,14,0.85);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    z-index: 10;
+    pointer-events: none;
+    transition: opacity 0.4s;
+  }
+  .map-loading.hidden { opacity: 0; pointer-events: none; }
+  .loading-text {
+    font-family: 'Inconsolata', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--fog);
+  }
+  .loading-bar {
+    width: 120px;
+    height: 1px;
+    background: rgba(168,180,200,0.1);
+    position: relative;
+    overflow: hidden;
+  }
+  .loading-bar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--rust);
+    animation: loadSweep 1.4s ease-in-out infinite;
+  }
+  @keyframes loadSweep {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(200%); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 18px 20px; }
+    .nav-links, .btn-nav { display: none; }
+    .nav-hamburger { display: flex; }
+    .map-controls { padding: 0 20px; }
+    .map-wrapper { flex-direction: column; }
+    .event-panel { width: 100%; height: 280px; border-left: none; border-top: 1px solid rgba(168,180,200,0.08); }
+    #map { min-height: 300px; }
+    .map-legend { bottom: 300px; }
+  }
+
+  @keyframes fadeDown{0%{opacity:0;transform:translateY(-10px)}100%{opacity:1;transform:translateY(0)}}
+  @keyframes fadeUp{0%{opacity:0;transform:translateY(16px)}100%{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<div class="mist-canvas">
+  <div class="mist-layer"></div>
+  <div class="mist-layer"></div>
+  <div class="mist-layer"></div>
+  <div class="mist-layer"></div>
+  <div class="mist-pocket"></div>
+  <div class="mist-pocket"></div>
+  <div class="mist-pocket"></div>
+</div>
+
+<!-- Nav -->
+<nav>
+  <div style="display:flex;align-items:center;gap:20px;">
+    <a href="/" class="nav-logo">Haar</a>
+    <span class="nav-tagline">Edinburgh</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="/">What's On</a></li>
+    <li><a href="/map" class="active">Map</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/promote">Promote</a></li>
+  </ul>
+  <button class="btn-nav" onclick="window.location.href='/'">Browse Events</button>
+  <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile menu -->
+<div class="nav-mobile" id="nav-mobile">
+  <a href="/" onclick="toggleMenu()">What's On</a>
+  <a href="/map" onclick="toggleMenu()">Map</a>
+  <a href="/about" onclick="toggleMenu()">About</a>
+  <a href="/promote" onclick="toggleMenu()">Promote</a>
+  <button class="btn-nav" onclick="toggleMenu();window.location.href='/'">Browse Events</button>
+</div>
+
+<!-- Controls bar -->
+<div class="map-controls">
+  <div class="control-group">
+    <span class="control-label">When</span>
+    <div class="filter-pills">
+      <button class="pill active" data-when="tonight" onclick="setWhen(this)">Tonight</button>
+      <button class="pill" data-when="tomorrow" onclick="setWhen(this)">Tomorrow</button>
+      <button class="pill" data-when="weekend" onclick="setWhen(this)">Weekend</button>
+      <button class="pill" data-when="this-week" onclick="setWhen(this)">This Week</button>
+      <button class="pill" data-when="all" onclick="setWhen(this)">All</button>
+    </div>
+  </div>
+  <div class="control-group">
+    <span class="control-label">Type</span>
+    <div class="filter-pills">
+      <button class="pill active" data-cat="all" onclick="setCat(this)">All</button>
+      <button class="pill" data-cat="Live Music" onclick="setCat(this)">Live Music</button>
+      <button class="pill" data-cat="Club Night" onclick="setCat(this)">Club Night</button>
+      <button class="pill" data-cat="Comedy" onclick="setCat(this)">Comedy</button>
+      <button class="pill" data-cat="Arts" onclick="setCat(this)">Arts</button>
+      <button class="pill" data-cat="Community" onclick="setCat(this)">Community</button>
+    </div>
+  </div>
+</div>
+
+<!-- Map + Panel -->
+<div class="map-wrapper">
+  <div style="position:relative;flex:1;min-height:0;">
+    <div id="map"></div>
+
+    <!-- Loading overlay -->
+    <div class="map-loading" id="map-loading">
+      <div class="loading-text">Finding tonight's events</div>
+      <div class="loading-bar"></div>
+    </div>
+
+    <!-- Legend -->
+    <div class="map-legend">
+      <div class="legend-title">Category</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#b8472a"></div>Live Music</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#7b5ea7"></div>Club Night</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#c8a96e"></div>Comedy</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#4a9ebb"></div>Arts</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#6db87a"></div>Community</div>
+    </div>
+  </div>
+
+  <!-- Event panel -->
+  <div class="event-panel">
+    <div class="panel-header">
+      <div class="panel-title" id="panel-title">Tonight in Edinburgh</div>
+      <div class="panel-subtitle" id="panel-count">Loading events…</div>
+    </div>
+    <div class="panel-list" id="panel-list">
+      <div class="panel-empty">
+        <div class="panel-empty-label">Loading events…</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── CONFIG ── Replace YOUR_MAPS_API_KEY with your actual key before deploying
+  const MAPS_API_KEY = 'YOUR_MAPS_API_KEY';
+
+  // ── CATEGORY COLOURS ──
+  const CAT_COLOURS = {
+    'Live Music': '#b8472a',
+    'Club Night': '#7b5ea7',
+    'Comedy':     '#c8a96e',
+    'Arts':       '#4a9ebb',
+    'Community':  '#6db87a',
+    'default':    '#a8b4c8'
+  };
+
+  function catColour(cat) {
+    return CAT_COLOURS[cat] || CAT_COLOURS.default;
+  }
+
+  // ── NOTION ──
+  async function notionQuery(body) {
+    const res = await fetch('/.netlify/functions/notion-proxy', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    return res.json();
+  }
+
+  function getProps(event) {
+    const p = event.properties;
+    const startIso = p['Start Date and Time']?.date?.start || '';
+    const endIso = p['End Date and Time']?.date?.start || '';
+    return {
+      name:        p['Event Name']?.title?.[0]?.plain_text || 'Untitled',
+      startIso,
+      startDate:   formatDate(startIso),
+      startTime:   formatTime(startIso),
+      endTime:     formatTime(endIso),
+      venue:       p['Venue']?.rich_text?.[0]?.plain_text || '',
+      area:        p['Area']?.select?.name || '',
+      category:    p['Category']?.select?.name || '',
+      price:       formatPrice(p['Price']?.number),
+      ticketUrl:   p['Ticket URL']?.url || '#',
+      description: p['Description']?.rich_text?.[0]?.plain_text || '',
+    };
+  }
+
+  function formatDate(iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+  }
+
+  function formatTime(iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    if (d.getHours() === 0 && d.getMinutes() === 0) return '';
+    return d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function formatPrice(num) {
+    if (num === null || num === undefined || num === '') return null;
+    if (num === 0) return { text: 'Free', cls: 'free' };
+    return { text: `£${num}`, cls: '' };
+  }
+
+  function buildFilters(when, category) {
+    const now = new Date();
+    function localDateStr(d) {
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    }
+    const today = new Date(now); today.setHours(0,0,0,0);
+    const tomorrow = new Date(today); tomorrow.setDate(today.getDate()+1);
+    const dayAfter = new Date(tomorrow); dayAfter.setDate(tomorrow.getDate()+1);
+    const weekEnd = new Date(today); weekEnd.setDate(today.getDate()+7);
+
+    const base = [
+      { property: 'Status', status: { equals: 'Live' } },
+      { or: [
+        { property: 'End Date and Time', date: { is_empty: true } },
+        { property: 'End Date and Time', date: { after: now.toISOString() } }
+      ]},
+      { property: 'Start Date and Time', date: { on_or_after: localDateStr(today) } }
+    ];
+
+    if (when === 'tonight') {
+      base.push({ and: [
+        { property: 'Start Date and Time', date: { on_or_after: localDateStr(today) } },
+        { property: 'Start Date and Time', date: { before: localDateStr(tomorrow) } }
+      ]});
+    } else if (when === 'tomorrow') {
+      base.push({ and: [
+        { property: 'Start Date and Time', date: { on_or_after: localDateStr(tomorrow) } },
+        { property: 'Start Date and Time', date: { before: localDateStr(dayAfter) } }
+      ]});
+    } else if (when === 'weekend') {
+      const dow = today.getDay();
+      const daysToFri = dow <= 5 ? (5 - dow) : 6;
+      const friday = new Date(today); friday.setDate(today.getDate() + daysToFri);
+      const monday = new Date(friday); monday.setDate(friday.getDate() + 3);
+      base.push({ and: [
+        { property: 'Start Date and Time', date: { on_or_after: localDateStr(friday) } },
+        { property: 'Start Date and Time', date: { before: localDateStr(monday) } }
+      ]});
+    } else if (when === 'this-week') {
+      base.push({ and: [
+        { property: 'Start Date and Time', date: { on_or_after: localDateStr(today) } },
+        { property: 'Start Date and Time', date: { before: localDateStr(weekEnd) } }
+      ]});
+    }
+
+    if (category && category !== 'all') {
+      base.push({ property: 'Category', select: { equals: category } });
+    }
+
+    return base;
+  }
+
+  // ── GEOCODING CACHE ──
+  const geocodeCache = {};
+
+  async function geocodeVenue(venueName) {
+    if (!venueName) return null;
+    if (geocodeCache[venueName]) return geocodeCache[venueName];
+
+    try {
+      const query = encodeURIComponent(`${venueName}, Edinburgh, Scotland`);
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${query}&key=${MAPS_API_KEY}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.results && data.results.length > 0) {
+        const loc = data.results[0].geometry.location;
+        geocodeCache[venueName] = loc;
+        return loc;
+      }
+    } catch(e) {
+      console.warn('Geocode failed for', venueName, e);
+    }
+    return null;
+  }
+
+  // ── MAP STATE ──
+  let map = null;
+  let markers = [];
+  let activeInfoWindow = null;
+  let activeFilter = { when: 'tonight', cat: 'all' };
+
+  // ── INIT MAP ──
+  function initMap() {
+    // Dark map style matching Haar's aesthetic
+    const darkStyle = [
+      { elementType: 'geometry', stylers: [{ color: '#0d1118' }] },
+      { elementType: 'labels.text.stroke', stylers: [{ color: '#0d1118' }] },
+      { elementType: 'labels.text.fill', stylers: [{ color: '#6e7d94' }] },
+      { featureType: 'administrative.locality', elementType: 'labels.text.fill', stylers: [{ color: '#a8b4c8' }] },
+      { featureType: 'poi', elementType: 'labels.text.fill', stylers: [{ color: '#6e7d94' }] },
+      { featureType: 'poi.park', elementType: 'geometry', stylers: [{ color: '#111520' }] },
+      { featureType: 'poi.park', elementType: 'labels.text.fill', stylers: [{ color: '#6e7d94' }] },
+      { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#1c2230' }] },
+      { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#111520' }] },
+      { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#1c2230' }] },
+      { featureType: 'road.highway', elementType: 'geometry.stroke', stylers: [{ color: '#111520' }] },
+      { featureType: 'road.highway', elementType: 'labels.text.fill', stylers: [{ color: '#6e7d94' }] },
+      { featureType: 'transit', elementType: 'geometry', stylers: [{ color: '#111520' }] },
+      { featureType: 'transit.station', elementType: 'labels.text.fill', stylers: [{ color: '#6e7d94' }] },
+      { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#080a0e' }] },
+      { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#4a5568' }] },
+      { featureType: 'water', elementType: 'labels.text.stroke', stylers: [{ color: '#080a0e' }] }
+    ];
+
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: { lat: 55.9533, lng: -3.1883 },
+      zoom: 13,
+      styles: darkStyle,
+      disableDefaultUI: true,
+      zoomControl: true,
+      zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_CENTER },
+      gestureHandling: 'greedy'
+    });
+
+    loadMapEvents();
+  }
+
+  function clearMarkers() {
+    markers.forEach(m => m.setMap(null));
+    markers = [];
+    if (activeInfoWindow) { activeInfoWindow.close(); activeInfoWindow = null; }
+  }
+
+  async function loadMapEvents() {
+    const loading = document.getElementById('map-loading');
+    const panelList = document.getElementById('panel-list');
+    const panelCount = document.getElementById('panel-count');
+    const panelTitle = document.getElementById('panel-title');
+
+    loading.classList.remove('hidden');
+    panelList.innerHTML = '<div class="panel-empty"><div class="panel-empty-label">Loading…</div></div>';
+
+    // Update panel title
+    const whenLabels = { tonight: 'Tonight', tomorrow: 'Tomorrow', weekend: 'This Weekend', 'this-week': 'This Week', all: 'All Events' };
+    panelTitle.textContent = `${whenLabels[activeFilter.when] || 'Tonight'} in Edinburgh`;
+
+    try {
+      const filters = buildFilters(activeFilter.when, activeFilter.cat);
+      const data = await notionQuery({
+        filter: { and: filters },
+        sorts: [{ property: 'Start Date and Time', direction: 'ascending' }],
+        page_size: 100
+      });
+
+      const events = (data.results || []).map(getProps).filter(e => e.venue);
+
+      clearMarkers();
+
+      if (events.length === 0) {
+        panelCount.textContent = 'No events found';
+        panelList.innerHTML = '<div class="panel-empty"><div class="panel-empty-label">No events found — check back soon.</div></div>';
+        loading.classList.add('hidden');
+        return;
+      }
+
+      panelCount.textContent = `${events.length} event${events.length !== 1 ? 's' : ''}`;
+
+      // Geocode all venues and place markers
+      const panelItems = [];
+      const geocodePromises = events.map(async (e) => {
+        const loc = await geocodeVenue(e.venue);
+        return { event: e, loc };
+      });
+
+      const results = await Promise.all(geocodePromises);
+      const mapped = results.filter(r => r.loc);
+
+      mapped.forEach(({ event: e, loc }, i) => {
+        const colour = catColour(e.category);
+
+        // Create custom SVG marker
+        const markerSvg = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="36" viewBox="0 0 28 36">
+            <path d="M14 0C6.268 0 0 6.268 0 14c0 9.625 14 22 14 22S28 23.625 28 14C28 6.268 21.732 0 14 0z" fill="${colour}" opacity="0.9"/>
+            <circle cx="14" cy="14" r="5" fill="white" opacity="0.9"/>
+          </svg>`;
+
+        const marker = new google.maps.Marker({
+          position: loc,
+          map: map,
+          title: e.name,
+          icon: {
+            url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(markerSvg),
+            scaledSize: new google.maps.Size(28, 36),
+            anchor: new google.maps.Point(14, 36)
+          }
+        });
+
+        // Info window content
+        const timeStr = e.endTime ? `${e.startTime} – ${e.endTime}` : e.startTime;
+        const dateStr = [e.startDate, timeStr].filter(Boolean).join(' · ');
+        const priceHtml = e.price ? `<div class="info-price ${e.price.cls}">${e.price.text}</div>` : '';
+        const btnHtml = e.ticketUrl !== '#' ? `<a class="info-btn" href="${e.ticketUrl}" target="_blank">Get Tickets →</a>` : '';
+
+        const infoContent = `
+          <div class="custom-info">
+            <div class="info-category" style="color:${colour}">${e.category || 'Event'}</div>
+            <div class="info-name">${e.name}</div>
+            <div class="info-meta">
+              ${e.venue ? `${e.venue}<br>` : ''}
+              ${dateStr || ''}
+            </div>
+            ${priceHtml}
+            ${btnHtml}
+          </div>`;
+
+        const infoWindow = new google.maps.InfoWindow({
+          content: infoContent,
+          disableAutoPan: false
+        });
+
+        marker.addListener('click', () => {
+          if (activeInfoWindow) activeInfoWindow.close();
+          infoWindow.open(map, marker);
+          activeInfoWindow = infoWindow;
+          // Highlight panel item
+          document.querySelectorAll('.panel-event').forEach(el => el.classList.remove('active'));
+          const panelItem = document.getElementById(`panel-event-${i}`);
+          if (panelItem) {
+            panelItem.classList.add('active');
+            panelItem.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          }
+          // GA4 tracking
+          if (typeof gtag !== 'undefined') {
+            gtag('event', 'map_marker_click', { event_name: e.name, venue: e.venue, category: e.category });
+          }
+        });
+
+        markers.push(marker);
+        panelItems.push({ event: e, marker, infoWindow, index: i });
+      });
+
+      // Render panel list
+      if (panelItems.length === 0) {
+        panelList.innerHTML = '<div class="panel-empty"><div class="panel-empty-label">Couldn\'t locate venues on map.</div></div>';
+      } else {
+        panelList.innerHTML = panelItems.map(({ event: e, index: i }) => {
+          const colour = catColour(e.category);
+          const timeStr = e.endTime ? `${e.startTime} – ${e.endTime}` : e.startTime;
+          const dateStr = [e.startDate, timeStr].filter(Boolean).join(' · ');
+          const priceHtml = e.price ? `<div class="panel-event-price ${e.price.cls}">${e.price.text}</div>` : '';
+          return `
+            <div class="panel-event" id="panel-event-${i}" onclick="focusMarker(${i})">
+              <div class="panel-dot" style="background:${colour}"></div>
+              <div>
+                <div class="panel-event-name">${e.name}</div>
+                <div class="panel-event-venue">${e.venue}</div>
+                <div class="panel-event-meta">${dateStr}</div>
+                ${priceHtml}
+              </div>
+            </div>`;
+        }).join('');
+
+        // Store panel items globally for focusMarker
+        window._mapPanelItems = panelItems;
+      }
+
+    } catch(err) {
+      panelCount.textContent = 'Error loading events';
+      panelList.innerHTML = '<div class="panel-empty"><div class="panel-empty-label">Something went wrong. Try refreshing.</div></div>';
+      console.error('Map load error:', err);
+    }
+
+    loading.classList.add('hidden');
+  }
+
+  function focusMarker(index) {
+    const items = window._mapPanelItems;
+    if (!items || !items[index]) return;
+    const { marker, infoWindow } = items[index];
+    map.panTo(marker.getPosition());
+    map.setZoom(15);
+    if (activeInfoWindow) activeInfoWindow.close();
+    infoWindow.open(map, marker);
+    activeInfoWindow = infoWindow;
+    document.querySelectorAll('.panel-event').forEach(el => el.classList.remove('active'));
+    const panelItem = document.getElementById(`panel-event-${index}`);
+    if (panelItem) panelItem.classList.add('active');
+  }
+
+  // ── FILTERS ──
+  function setWhen(el) {
+    document.querySelectorAll('[data-when]').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    activeFilter.when = el.dataset.when;
+    loadMapEvents();
+  }
+
+  function setCat(el) {
+    document.querySelectorAll('[data-cat]').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    activeFilter.cat = el.dataset.cat;
+    loadMapEvents();
+  }
+
+  // ── MOBILE MENU ──
+  function toggleMenu() {
+    const menu = document.getElementById('nav-mobile');
+    menu.classList.toggle('open');
+    document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+  }
+</script>
+
+<!-- Load Google Maps API — replace YOUR_MAPS_API_KEY before deploying -->
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=YOUR_MAPS_API_KEY&callback=initMap">
+</script>
+
+</body>
+</html>

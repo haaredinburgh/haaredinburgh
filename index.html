@@ -618,6 +618,7 @@
       description: p['Description']?.rich_text?.[0]?.plain_text || '',
       imageUrl:    p['Image URL']?.url || '',
       featured:    p['Featured Event']?.checkbox || false,
+      haarOnly:    p['Haar Only']?.checkbox || false,
       status:      p['Status']?.status?.name || ''
     };
   }
@@ -651,7 +652,7 @@
             </div>
             <div class="card-footer">
               ${e.price ? `<div class="card-price ${e.price.cls}">${e.price.text}</div>` : ''}
-              ${e.ticketUrl === '#' ? `<span class="haar-badge">Haar only</span>` : ''}
+              ${e.haarOnly ? `<span class="haar-badge">Haar only</span>` : ''}
               <button class="card-share" onclick="event.stopPropagation();shareEvent('${e.name.replace(/'/g,"\\'")}','${e.venue.replace(/'/g,"\\'")}','${dateStr}',this)" aria-label="Share event">
                 <svg id="share-svg-template" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8.684 8.316L12 5m0 0l3.316 3.316M12 5v11"/><path d="M5 14v4a1 1 0 001 1h12a1 1 0 001-1v-4"/></svg>
                 ${getShareIcon()}

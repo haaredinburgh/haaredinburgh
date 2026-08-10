@@ -445,15 +445,7 @@
     <div class="hero-stats">
       <div>
         <span class="stat-number" id="stat-events">—</span>
-        <span class="stat-label">Events this week</span>
-      </div>
-      <div>
-        <span class="stat-number" id="stat-venues">—</span>
-        <span class="stat-label">Active venues</span>
-      </div>
-      <div>
-        <span class="stat-number">0</span>
-        <span class="stat-label">Paid placements</span>
+        <span class="stat-label">Events listed</span>
       </div>
     </div>
   </div>
@@ -983,16 +975,12 @@
 
   async function loadStats() {
     const now = new Date();
-    const today = new Date(now); today.setHours(0,0,0,0);
-    const weekEnd = new Date(today); weekEnd.setDate(today.getDate() + 7);
 
     try {
       const data = await notionQuery({
         filter: {
           and: [
             { property: 'Status', status: { equals: 'Live' } },
-            { property: 'Start Date and Time', date: { on_or_after: today.toISOString().split('T')[0] } },
-            { property: 'Start Date and Time', date: { before: weekEnd.toISOString().split('T')[0] } },
             { or: [
               { property: 'End Date and Time', date: { is_empty: true } },
               { property: 'End Date and Time', date: { after: now.toISOString() } }
@@ -1003,20 +991,9 @@
       });
 
       const events = data.results || [];
-      const eventCount = events.length;
-
-      // Count unique venues
-      const venues = new Set(
-        events
-          .map(e => e.properties['Venue']?.rich_text?.[0]?.plain_text)
-          .filter(Boolean)
-      );
-
-      document.getElementById('stat-events').textContent = eventCount;
-      document.getElementById('stat-venues').textContent = venues.size;
+      document.getElementById('stat-events').textContent = events.length;
     } catch(err) {
       document.getElementById('stat-events').textContent = '—';
-      document.getElementById('stat-venues').textContent = '—';
       console.error('Stats error:', err);
     }
   }

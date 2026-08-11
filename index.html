@@ -740,11 +740,10 @@
       }
 
       if (data.results && data.results.length > 0) {
+        panel.style.display = '';
         panel.innerHTML = renderFeatured(data.results[0]);
       } else {
         panel.style.display = 'none';
-        document.querySelector('.hero').style.gridTemplateColumns = '1fr';
-        document.querySelector('.hero-left').style.borderRight = 'none';
       }
     } catch(err) {
       panel.style.display = 'none';

@@ -670,7 +670,6 @@
         <div class="featured-footer">
           <div>
             ${e.price ? `<div class="featured-price">${e.price.text}</div>` : ''}
-            ${e.venue && e.ticketUrl !== '#' ? `<div class="featured-price-note">Tickets via ${e.venue}</div>` : ''}
           </div>
           <div style="display:flex;gap:12px;align-items:center;">
             <button class="card-share" onclick="event.stopPropagation();shareEvent('${e.name.replace(/'/g,"\\'")}','${e.venue.replace(/'/g,"\\'")}','${e.startDate}',this)" aria-label="Share event">

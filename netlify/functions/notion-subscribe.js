@@ -1,5 +1,5 @@
 exports.handler = async function(event) {
-  const NOTION_KEY = process.env.NOTION_KEY;
+  const NOTION_KEY = process.env.NOTION_API_KEY;
   const SIGNUPS_DB = process.env.NOTION_SIGNUPS_DB;
 
   const headers = {

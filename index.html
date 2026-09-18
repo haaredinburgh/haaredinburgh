@@ -516,9 +516,56 @@
     </p>
   </div>
   <div class="newsletter-form">
-    <input class="newsletter-input" type="email" placeholder="your@email.com" aria-label="Email address">
-    <button class="newsletter-submit">Subscribe →</button>
-  </div>
+  <input class="newsletter-input" id="newsletter-email" type="email" placeholder="your@email.com" aria-label="Email address">
+  <button class="newsletter-submit" id="newsletter-submit-btn">Subscribe →</button>
+  <p id="newsletter-message" style="font-family:'Inconsolata',monospace;font-size:12px;letter-spacing:1px;display:none;"></p>
+</div>
+
+<script>
+(function() {
+  const btn = document.getElementById('newsletter-submit-btn');
+  const input = document.getElementById('newsletter-email');
+  const message = document.getElementById('newsletter-message');
+
+  btn.addEventListener('click', async function() {
+    const email = input.value.trim();
+    message.style.display = 'block';
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      message.textContent = 'Please enter a valid email address.';
+      message.style.color = '#B8472A';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Subscribing...';
+
+    try {
+      const res = await fetch('/.netlify/functions/notion-subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        message.textContent = "You're in. Thanks for signing up.";
+        message.style.color = '#A8B4C8';
+        input.value = '';
+      } else {
+        message.textContent = 'Something went wrong. Please try again.';
+        message.style.color = '#B8472A';
+      }
+    } catch (err) {
+      message.textContent = 'Something went wrong. Please try again.';
+      message.style.color = '#B8472A';
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Subscribe →';
+  });
+})();
+</script>
 </section>
 
 <div class="page-end"></div>

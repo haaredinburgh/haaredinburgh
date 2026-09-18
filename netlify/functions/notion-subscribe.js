@@ -40,7 +40,7 @@ exports.handler = async function(event) {
             title: [{ text: { content: email } }]
           },
           'Source': {
-            select: { name: 'website' }
+            select: { name: 'Website' }
           }
         }
       })

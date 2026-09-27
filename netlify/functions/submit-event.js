@@ -1,5 +1,5 @@
 exports.handler = async function(event) {
-  const NOTION_KEY = 'ntn_e43061445058HlCCAAFiK0jVArC75a7UOt0FNYQm7fu5Rt';
+  const NOTION_KEY = process.env.NOTION_API_KEY;
   const DATABASE_ID = '327100aa8cf98081bc51d1dd343e7a37';
 
   const headers = {

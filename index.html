@@ -631,16 +631,25 @@
     if (num === 0) return { text: 'Free', cls: 'free' };
     return { text: `£${num}`, cls: '' };
   }
-
+  function isMultiDayEvent(startIso, endIso) {
+    if (!startIso || !endIso) return false;
+    const s = new Date(startIso), e = new Date(endIso);
+    if (s.toDateString() === e.toDateString()) return false;
+    return e.getHours() >= 6; // overnight events (e.g. 22:00 to 03:00) stay single-day
+     }
+  
   function getProps(event) {
     const p = event.properties;
     const startIso = p['Start Date and Time']?.date?.start || '';
     const endIso = p['End Date and Time']?.date?.start || '';
+    const multiDay = isMultiDayEvent(startIso, endIso);
     return {
       name:        p['Event Name']?.title?.[0]?.plain_text || 'Untitled',
       startIso,
       endIso,
       startDate:   formatDate(startIso),
+      isMultiDay:  multiDay,
+      dateLabel:   multiDay ? `${formatDate(startIso)} – ${formatDate(endIso)}` : formatDate(startIso),
       startTime:   formatTime(startIso),
       endTime:     formatTime(endIso),
       venue:       p['Venue']?.rich_text?.[0]?.plain_text || '',
@@ -658,8 +667,8 @@
 
   function renderCard(event, index) {
     const e = getProps(event);
-    const timeStr = e.endTime ? `${e.startTime} – ${e.endTime}` : e.startTime;
-    const dateStr = [e.startDate, timeStr].filter(Boolean).join(' · ');
+    const timeStr = e.isMultiDay ? '' : (e.endTime ? `${e.startTime} – ${e.endTime}` : e.startTime);
+    const dateStr = [e.dateLabel, timeStr].filter(Boolean).join(' · ');
     const hasImage = !!e.imageUrl;
     const clickHandler = e.ticketUrl !== '#' ? `onclick="window.open('${e.ticketUrl}','_blank')"` : '';
     const cursor = e.ticketUrl !== '#' ? 'pointer' : 'default';
@@ -699,7 +708,7 @@
 
   function renderFeatured(event) {
     const e = getProps(event);
-    const timeStr = e.endTime ? `${e.startTime} – ${e.endTime}` : e.startTime;
+    const timeStr = e.isMultiDay ? '' : (e.endTime ? `${e.startTime} – ${e.endTime}` : e.startTime);
 
     return `
       <div class="featured-event" onclick="${e.ticketUrl !== '#' ? `window.open('${e.ticketUrl}','_blank')` : ''}">
@@ -710,7 +719,7 @@
           <div class="featured-title">${e.name}</div>
           <div class="featured-meta">
             ${e.venue ? `<span>Venue <strong>${e.venue}</strong></span>` : ''}
-            ${e.startDate ? `<span>Date <strong>${e.startDate}${timeStr ? ' · ' + timeStr : ''}</strong></span>` : ''}
+            ${e.dateLabel ? `<span>Date <strong>${e.dateLabel}${timeStr ? ' · ' + timeStr : ''}</strong></span>` : ''}
             ${e.area ? `<span>Area <strong>${e.area}</strong></span>` : ''}
           </div>
         </div>
@@ -719,7 +728,7 @@
             ${e.price ? `<div class="featured-price">${e.price.text}</div>` : ''}
           </div>
           <div style="display:flex;gap:12px;align-items:center;">
-            <button class="card-share" onclick="event.stopPropagation();shareEvent('${e.name.replace(/'/g,"\\'")}','${e.venue.replace(/'/g,"\\'")}','${e.startDate}',this)" aria-label="Share event">
+            <button class="card-share" onclick="event.stopPropagation();shareEvent('${e.name.replace(/'/g,"\\'")}','${e.venue.replace(/'/g,"\\'")}','${e.dateLabel}',this)" aria-label="Share event">
                 ${getShareIcon()}
             </button>
             ${e.ticketUrl !== '#' ? `<button class="btn-find">Find Tickets →</button>` : ''}
@@ -739,13 +748,16 @@
     const month = String(now.getMonth() + 1).padStart(2, '0');
     const day = String(now.getDate()).padStart(2, '0');
     const todayStr = `${year}-${month}-${day}`;
-    return [
+        return [
       { property: 'Status', status: { equals: 'Live' } },
       { or: [
         { property: 'End Date and Time', date: { is_empty: true } },
         { property: 'End Date and Time', date: { after: now.toISOString() } }
       ]},
-      { property: 'Start Date and Time', date: { on_or_after: todayStr } }
+      { or: [
+        { property: 'Start Date and Time', date: { on_or_after: todayStr } },
+        { property: 'End Date and Time', date: { after: now.toISOString() } }
+      ]}
     ];
   }
 
@@ -816,32 +828,29 @@
 
     const baseFilters = buildBaseFilters(now);
 
-    // When filter
+        // When filter: an event counts if it is on at any point in the window
+    function overlapsWindow(winStart, winEnd) {
+      return [
+        { property: 'Start Date and Time', date: { before: localDateStr(winEnd) } },
+        { or: [
+          { property: 'End Date and Time', date: { on_or_after: localDateStr(winStart) } },
+          { property: 'Start Date and Time', date: { on_or_after: localDateStr(winStart) } }
+        ]}
+      ];
+    }
+
     if (filter.when === 'tonight') {
-      baseFilters.push({ and: [
-        { property: 'Start Date and Time', date: { on_or_after: localDateStr(today) } },
-        { property: 'Start Date and Time', date: { before: localDateStr(tomorrow) } }
-      ]});
+      baseFilters.push(...overlapsWindow(today, tomorrow));
     } else if (filter.when === 'tomorrow') {
-      baseFilters.push({ and: [
-        { property: 'Start Date and Time', date: { on_or_after: localDateStr(tomorrow) } },
-        { property: 'Start Date and Time', date: { before: localDateStr(dayAfter) } }
-      ]});
+      baseFilters.push(...overlapsWindow(tomorrow, dayAfter));
     } else if (filter.when === 'weekend') {
-      // Find the next Friday
-      const dayOfWeek = today.getDay(); // 0=Sun, 1=Mon, ..., 5=Fri, 6=Sat
+      const dayOfWeek = today.getDay();
       const daysUntilFriday = dayOfWeek <= 5 ? (5 - dayOfWeek) : 6;
       const friday = new Date(today); friday.setDate(today.getDate() + daysUntilFriday);
       const monday = new Date(friday); monday.setDate(friday.getDate() + 3);
-      baseFilters.push({ and: [
-        { property: 'Start Date and Time', date: { on_or_after: localDateStr(friday) } },
-        { property: 'Start Date and Time', date: { before: localDateStr(monday) } }
-      ]});
+      baseFilters.push(...overlapsWindow(friday, monday));
     } else if (filter.when === 'this-week') {
-      baseFilters.push({ and: [
-        { property: 'Start Date and Time', date: { on_or_after: localDateStr(today) } },
-        { property: 'Start Date and Time', date: { before: localDateStr(weekEnd) } }
-      ]});
+      baseFilters.push(...overlapsWindow(today, weekEnd));
     }
 
     // Update heading

@@ -655,7 +655,7 @@
       endTime:     formatTime(endIso),
       venue:       p['Venue']?.rich_text?.[0]?.plain_text || '',
       area:        p['Area']?.select?.name || '',
-      category:    p['Category']?.select?.name || '',
+      category:    (p['Category']?.multi_select?.map(c => c.name) || (p['Category']?.select?.name ? [p['Category'].select.name] : [])).join(' / '),
       price:       formatPrice(p['Price']?.number),
       ticketUrl:   p['Ticket URL']?.url || '#',
       description: p['Description']?.rich_text?.[0]?.plain_text || '',
@@ -868,7 +868,7 @@
     }
 
     if (filter.category && filter.category !== 'all') {
-      baseFilters.push({ property: 'Category', select: { equals: filter.category } });
+      baseFilters.push({ property: 'Category', multi_select: { contains: filter.category } });
     }
     if (filter.area && filter.area !== 'all') {
       baseFilters.push({ property: 'Area', select: { equals: filter.area } });

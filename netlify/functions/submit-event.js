@@ -74,8 +74,9 @@ exports.handler = async function(event) {
     }
 
     if (category) {
+      const cats = category.split(',').map(c => c.trim()).filter(Boolean).slice(0, 2);
       properties['Category'] = {
-        select: { name: category }
+        multi_select: cats.map(name => ({ name }))
       };
     }
 

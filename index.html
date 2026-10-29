@@ -457,6 +457,7 @@
   <button class="tab" data-href="/comedy" onclick="filterNav(this)">Comedy</button>
   <button class="tab" data-href="/arts" onclick="filterNav(this)">Arts</button>
   <button class="tab" data-href="/community" onclick="filterNav(this)">Community</button>
+  <button class="tab" data-href="/food" onclick="filterNav(this)">Food</button>
 </div>
 
 <!-- Mobile when pills -->
@@ -489,6 +490,7 @@
       <button class="pill" data-href="/comedy" onclick="filterNav(this)">Comedy</button>
       <button class="pill" data-href="/arts" onclick="filterNav(this)">Arts</button>
       <button class="pill" data-href="/community" onclick="filterNav(this)">Community</button>
+      <button class="pill" data-href="/food" onclick="filterNav(this)">Food</button>
     </div>
   </div>
 </div>
@@ -995,6 +997,7 @@
     else if (href.includes('/comedy')) { activeFilters.category = 'Comedy'; }
     else if (href.includes('/arts')) { activeFilters.category = 'Arts'; }
     else if (href.includes('/community')) { activeFilters.category = 'Community'; }
+    else if (href.includes('/food')) { activeFilters.category = 'Food'; }
     else if (href.includes('/events/old-town')) { activeFilters.area = 'Old Town'; }
     else if (href.includes('/events/leith')) { activeFilters.area = 'Leith'; }
     else if (href.includes('/events/southside')) { activeFilters.area = 'Southside'; }

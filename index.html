@@ -552,7 +552,8 @@
       const data = await res.json();
 
       if (res.ok) {
-        message.textContent = "You're in. Thanks for signing up.";
+        message.textContent = "You're in. Thanks for signing up.";        
+        if (typeof gtag === 'function') gtag('event', 'newsletter_signup');
         message.style.color = '#A8B4C8';
         input.value = '';
       } else {
@@ -673,7 +674,7 @@
     const timeStr = e.isMultiDay ? '' : (e.endTime ? `${e.startTime} – ${e.endTime}` : e.startTime);
     const dateStr = [e.dateLabel, timeStr].filter(Boolean).join(' · ');
     const hasImage = !!e.imageUrl;
-    const clickHandler = e.ticketUrl !== '#' ? `onclick="window.open('${e.ticketUrl}','_blank')"` : '';
+    const clickHandler = e.ticketUrl !== '#' ? `onclick="openTicket('${e.ticketUrl}')"` : '';
     const cursor = e.ticketUrl !== '#' ? 'pointer' : 'default';
 
     const imageBlock = hasImage
@@ -714,7 +715,7 @@
     const timeStr = e.isMultiDay ? '' : (e.endTime ? `${e.startTime} – ${e.endTime}` : e.startTime);
 
     return `
-      <div class="featured-event" onclick="${e.ticketUrl !== '#' ? `window.open('${e.ticketUrl}','_blank')` : ''}">
+      <div class="featured-event" onclick="${e.ticketUrl !== '#' ? `openTicket('${e.ticketUrl}')` : ''}">
         <div class="card-glow glow-rust"></div>
         <span class="event-badge">Up Next</span>
         <div>
@@ -962,6 +963,11 @@
     if (o) o.remove();
   }
 
+  function openTicket(url) {
+    if (typeof gtag === 'function') gtag('event', 'ticket_click', { link_url: url });
+    window.open(url, '_blank');
+  }
+  
   function copyLink(url, btn) {
     navigator.clipboard.writeText(url).then(() => {
       btn.textContent = 'Copied!';
@@ -985,6 +991,7 @@
     }
 
     const href = el.dataset.href || '';
+    if (typeof gtag === 'function') gtag('event', 'filter_select', { filter_label: el.textContent.trim() });
     if (href === '/all-types') { activeFilters.category = 'all'; }
     else if (href === '/all-areas') { activeFilters.area = 'all'; }
     else if (href.includes('/events/all')) { activeFilters.when = 'all'; }

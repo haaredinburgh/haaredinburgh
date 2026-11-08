@@ -686,6 +686,7 @@
     .then(result => {
       if (result.success) {
         form.style.display = 'none';
+        if (typeof gtag === 'function') gtag('event', 'event_submitted');
         document.getElementById('form-success').style.display = 'block';
       } else {
         btn.textContent = 'Submit event →';
